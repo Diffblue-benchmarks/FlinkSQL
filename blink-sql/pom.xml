@@ -4,13 +4,40 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>blink</artifactId>
-        <groupId>pingle.wang</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <groupId>ambition</groupId>
+        <version>v2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>blink-sql</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v2.0.0</version>
 
+    <dependencies>
+        <dependency>
+            <groupId>ambition</groupId>
+            <artifactId>blink-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ambition</groupId>
+            <artifactId>blink-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table_2.11</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

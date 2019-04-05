@@ -19,20 +19,27 @@
 
 三.发布版本：
 
-   [v2.0.0](https://github.com/ambition119/FlinkSQL/tree/v2.0.0)  待开发完成
+  
+   SQL书写语法参考flink issues和对应提供的doc:
+   [SQL DDL](https://issues.apache.org/jira/browse/FLINK-8039),
+   [SQL DDL DOC](https://docs.google.com/document/d/1TTP-GCC8wSsibJaSUyFZ_5NBAHYEB1FVmPpP7RgDGBA/edit?usp=sharing)。
+   
+   
+   [v2.0.0](https://github.com/ambition119/FlinkSQL/tree/v2.0.0)
    
         blink-client 接口定义
         blink-sql    stream和batch table的sql解析
+        blink-libraries 自定义source, sink, side开发
         blink-batch  BatchTableSource和BatchTableSink封装实现
         blink-stream StreamTableSource和StreamTableSink
-        blink-job  封装为batch/stream job 
+        blink-job  batch/stream job 提交
     
-   新特性：
+   [新特性](/doc/v2.0.0.md)
         
-        1. 抽取sql层被流和批使用, 如果flink支持ddl语句，则可以简化sql解析的代码
-        2. 增加sql实现批处理开发
+        1. 抽取sql层被流和批使用,SQL参考flink issues和对应提供的doc
+        2. 增加批处理开发
         3. 增加维表功能
-        4. 升级flink版本为1.8.x
+        4. 升级flink版本为1.7.x
 
    [v1.0.0](https://github.com/ambition119/FlinkSQL/tree/v1.0.0)  2018年7月
    
@@ -45,32 +52,52 @@
        1. 实现create function
        2. 实现sql开发流处理程序任务  
        3. 更改源码实现sql CEP
-       
-四.代码关注
+           
+四.样例
 
-[apache flink](https://github.com/apache/flink)
+batch sql示例：
+```sql
+CREATE FUNCTION demouf AS 'ambition.api.sql.function.DemoUDF' 
+LIBRARY 'hdfs://flink/udf/jedis.jar','hdfs://flink/udf/customudf.jar';
 
+CREATE SOURCE TABLE csv_source (
+  name varchar, 
+  amount float, 
+  `date` date
+) 
+with (
+  type=csv,
+  'file.path'='file://demo_in.csv'
+);
 
-[apache calcite](https://github.com/apache/calcite)
+CREATE SINK TABLE csv_sink (
+    `date` date, 
+    amount float, 
+    PRIMARY KEY (`date`,amount)
+) 
+with (
+  type=csv,
+  'file.path'='file://demo_out.csv'
+);
 
+create view view_select as 
+SELECT `date`, amount 
+FROM csv_source 
+group by `date`,amount;
 
-[uber AthenaX](https://github.com/uber/AthenaX)
-
-
-[DTStack flinkStreamSQL](https://github.com/DTStack/flinkStreamSQL)       
-    
-五.样例
-
-v1.0.0 sql开发流任务示例:
+insert into csv_sink 
+SELECT `date`, sum(amount) 
+FROM view_select 
+group by `date`;
+```
+stream sql 示例：
 ```sql
 CREATE FUNCTION demouf AS 
-      'pingle.wang.api.sql.function.DemoUDF' 
-USING JAR 'hdfs://flink/udf/jedis.jar',
-      JAR 'hdfs://flink/udf/customudf.jar';
+      'ambition.api.sql.function.DemoUDF' 
+LIBRARY 'hdfs://flink/udf/jedis.jar','hdfs://flink/udf/customudf.jar';
       
-      
-CREATE TABLE kafka_source (
-      `date` string,
+CREATE SOURCE TABLE kafka_source (
+      `date` varchar,
       amount float, 
       proctime timestamp
       ) 
@@ -83,9 +110,8 @@ with (
       'kafka.bootstrap.servers'='localhost:9092'
 );
 
-
-CREATE TABLE mysql_sink (
-      `date` string, 
+CREATE SINK TABLE mysql_sink (
+      `date` varchar, 
       amount float, 
       PRIMARY KEY (`date`,amount)
       ) 
@@ -98,7 +124,6 @@ with (
       'mysql.user'=root,
       'mysql.pass'=root
 );
-
 
 CREATE VIEW view_select AS 
       SELECT `date`, 
@@ -119,3 +144,16 @@ INSERT INTO mysql_sink
           `date`
       ;
 ```
+
+五.代码关注
+
+[apache flink](https://github.com/apache/flink)
+
+
+[apache calcite](https://github.com/apache/calcite)
+
+
+[uber AthenaX](https://github.com/uber/AthenaX)
+
+
+[DTStack flinkStreamSQL](https://github.com/DTStack/flinkStreamSQL)  

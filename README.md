@@ -18,40 +18,30 @@
     --> JobGraph和对应job提交，StandaloneClusterClient.submitJob或者YarnClusterClient.runDetached
 
 三.发布版本：
-
+    
+   [v3.0.0](https://github.com/ambition119/FlinkSQL/tree/v3.0.0)   待开发
+         使用最新发布版本的flink, 流批处理一体化实现
   
-   SQL书写语法参考flink issues和对应提供的doc:
-   [SQL DDL](https://issues.apache.org/jira/browse/FLINK-8039),
-   [SQL DDL DOC](https://docs.google.com/document/d/1TTP-GCC8wSsibJaSUyFZ_5NBAHYEB1FVmPpP7RgDGBA/edit?usp=sharing)。
-   
-   
-   [v2.0.0](https://github.com/ambition119/FlinkSQL/tree/v2.0.0)
+  
+   [v2.0.0](https://github.com/ambition119/FlinkSQL/tree/v2.0.0)   2019年4月
    
         blink-client 接口定义
         blink-sql    stream和batch table的sql解析
         blink-libraries 自定义source, sink, side开发
-        blink-batch  BatchTableSource和BatchTableSink封装实现
+        blink-batch  BatchTableSource和BatchTableSink
         blink-stream StreamTableSource和StreamTableSink
         blink-job  batch/stream job 提交
-    
+   
+   SQL书写语法参考Flink issues和对应提供的doc:
+        [SQL DDL ISSUE](https://issues.apache.org/jira/browse/FLINK-8039),
+        [SQL DDL DOC](https://docs.google.com/document/d/1TTP-GCC8wSsibJaSUyFZ_5NBAHYEB1FVmPpP7RgDGBA/edit?usp=sharing)。
+       
    [新特性](/doc/v2.0.0.md)
         
         1. 抽取sql层被流和批使用,SQL参考flink issues和对应提供的doc
         2. 增加批处理开发
         3. 增加维表功能
         4. 升级flink版本为1.7.x
-
-   [v1.0.0](https://github.com/ambition119/FlinkSQL/tree/v1.0.0)  2018年7月
-   
-       blink-client 接口定义
-       blink-sqlserver  stream table的sql解析
-       blink-job  封装为stream job    
-      
-   [新特性](/doc/v1.0.0.md)
-       
-       1. 实现create function
-       2. 实现sql开发流处理程序任务  
-       3. 更改源码实现sql CEP
            
 四.样例
 
